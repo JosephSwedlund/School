@@ -7,6 +7,7 @@
 
 **highlight(tileName)**
  - takes a tile name and hilights that single tile
+ - returns the highlight object
  - does nothing and returns null if the tile doesn't exist
  - **highlight('3:5')** hilights 3:5
  - **highlight('-3:8)** does nothing
