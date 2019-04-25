@@ -39,6 +39,3 @@ for (let row = 0; row < 8; row++) {
 }
 
 stage.update();
-
-highlightTiles(['0:0', '0:1', '0:2', '0:3', '0:4']);
-revertTiles(['0:1', '2:3']);
