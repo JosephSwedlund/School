@@ -7,7 +7,7 @@
 
 **highlight(tileName)**
  - takes a tile name and hilights that single tile
- - if the tile doesn't exist, it does nothing
+ - does nothing and returns null if the tile doesn't exist
  - **highlight('3:5')** hilights 3:5
  - **highlight('-3:8)** does nothing
 
@@ -19,6 +19,7 @@
   
  **highlightTiles(tileList)**
   - takes an array of tile names and call **hilight(tileName)** on each
+  - returns an array of the higlight objects
  
  **revertHighlightedTiles(tileList)** 
   - takes an array of tile names and calls **revert(tileName)** on each
