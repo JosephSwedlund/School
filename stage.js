@@ -3,31 +3,106 @@ function revertTiles(tileList) {
 }
 
 function highlightTiles(tileList) {
-	let highlights = new Array
-	tileList.forEach((tileName) => highlights.push(highlight(tileName)));
+	let highlights = new Array();
+	tileList.forEach((tileName) => activeHighlights.push(highlight(tileName)));
 	return highlights;
 }
 
 function highlight(tileName) {
 	let tile = stage.getChildByName(tileName);
 	if (tile) {
-		stage.addChild(highlighter.clone()).set({ x: tile.x, y: tile.y, name: tile.name+'HL' });
+		var hl = stage.addChild(highlighter.clone()).set({ x: tile.x, y: tile.y, name: tile.name+'HL'});
+		hl.on("click", function(event) { 
+			move(tile.y/70, tile.x/70);
+		});
 		stage.update();
+		return tile.name;
 	}
-	return tile;
 }
 
 function revert(tileName) {
 	let highlight = stage.getChildByName(tileName+'HL');
 	if (highlight) {
-		stage.removeChild(highlight);
+		stage.removeChild(highlight)
 		stage.update();
 	}
 }
 
+function move(row, col) {
+	let tile = stage.getChildByName(row + ":" + col);
+	if(tile){
+		selected.set({ x: tile.x+35, y: tile.y+35, name: row + ":" + col + "P", row: row, col: col});
+	}
+	revertTiles(activeHighlights)
+	activeHighlights = new Array();
+	stage.update();
+}
+
+function place(row, col, color) {
+	let tile = stage.getChildByName(row + ":" + col);
+	if (tile && color == "white") {
+		stage.addChild(whitePiece.clone()).set({ x: tile.x+35, y: tile.y+35, name: tile.name+'P', row: row, col: col});
+		if(!player){
+			stage.getChildByName(row + ":" + col + "P").on("click", function(event) { 
+				selected = this;
+				revertTiles(activeHighlights)
+				activeHighlights = new Array();
+				highlightTiles([(this.row-1)+":"+(this.col-1), (this.row-1)+":"+(this.col), (this.row)+":"+(this.col-1), (this.row+1)+":"+(this.col), (this.row)+":"+(this.col+1), (this.row-1)+":"+(this.col+1)]);
+			});
+		}
+		stage.update();
+	}else if (tile && color == "black") {
+		stage.addChild(blackPiece.clone()).set({ x: tile.x+35, y: tile.y+35, name: tile.name+'P', row: row, col: col});
+		if(player){
+				stage.getChildByName(row + ":" + col + "P").on("click", function(event) { 
+				selected = this;
+				revertTiles(activeHighlights)
+				activeHighlights = new Array();
+				highlightTiles([(this.row-1)+":"+(this.col), (this.row)+":"+(this.col-1), (this.row+1)+":"+(this.col), (this.row)+":"+(this.col+1), (this.row+1)+":"+(this.col-1), (this.row+1)+":"+(this.col+1)]);
+			});
+		}
+		stage.update();
+	}
+	return tile;
+}
+
+function setupBoard() {
+	if(player){
+		for (let col = 0; col < 8; col++) {
+			for (let row = 0; row < 2; row++) {
+				place(row, col, "white");	
+			}	
+		}
+		for (let col = 0; col < 8; col++) {
+			for (let row = 6; row < 8; row++) {
+				place(row, col, "black");	
+			}	
+		}
+	}else{
+		for (let col = 0; col < 8; col++) {
+			for (let row = 0; row < 2; row++) {
+				place(row, col, "black");	
+			}	
+		}
+		for (let col = 0; col < 8; col++) {
+			for (let row = 6; row < 8; row++) {
+				place(row, col, "white");	
+			}	
+		}		
+	}
+	
+}
+
 var stage;
+var player = 1;
+var selected;
+var activeHighlights = new Array();
 const highlightGraphics = new createjs.Graphics().f('#2af').drawRect(0,0,70,70);
 const highlighter = new createjs.Shape().set({ alpha: 0.4, graphics: highlightGraphics });
+const whiteGraphics = new createjs.Graphics().f('#AAA').drawCircle(0,0,30);
+const whitePiece = new createjs.Shape().set({ alpha: 1, graphics: whiteGraphics });
+const blackGraphics = new createjs.Graphics().f('#555').drawCircle(0,0,30);
+const blackPiece = new createjs.Shape().set({ alpha: 1, graphics: blackGraphics });
 
 $(function() {
 	stage = new createjs.Stage(document.getElementById('myCanvas'));
@@ -44,4 +119,33 @@ $(function() {
 	}
 
 	stage.update();
+	
+	//highlight("5:5");
+	
+	place("2:2", "white");
+	
+	setupBoard();
+	/*
+	for (let row = 0; row < 8; row++) {
+		for (let col = 0; col < 8; col++) {
+			stage.getChildByName(row + ":" + col + "P").on("click", function(event) {
+				revertTiles(activeHighlights)
+				activeHighlights = new Array();
+				for (let x = -1; x < 2; x++) {
+					for (let y = -1; y < 2; y++) {
+						if(!(x == 0 && y == 0)){
+							activeHighlights.push(highlight((row+y) + ":" + (col+x)));
+							
+						}
+							
+					}
+				}
+			})		
+		}
+	}
+	*/	
+		
+		
+
+	
 });
