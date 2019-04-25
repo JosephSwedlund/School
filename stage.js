@@ -22,20 +22,23 @@ function revert(tileName) {
 	}
 }
 
-var stage = new createjs.Stage(document.getElementById('myCanvas'));
+var stage;
 const highlightGraphics = new createjs.Graphics().f('#2af').drawRect(0,0,70,70);
 const highlighter = new createjs.Shape().set({ alpha: 0.4, graphics: highlightGraphics });
 
-var black = false;
-for (let row = 0; row < 8; row++) {
-	for (let col = 0; col < 8; col++) {
-		let tile = new createjs.Shape().set({ x: 70*col, y: 70*row, name: row+':'+col });
-		tile.color = (black ? '#222' : '#fff');
-		tile.graphics.beginFill(tile.color).drawRect(0,0,70,70);
-		stage.addChild(tile);
+$(function() {
+	stage = new createjs.Stage(document.getElementById('myCanvas'));
+	var black = false;
+	for (let row = 0; row < 8; row++) {
+		for (let col = 0; col < 8; col++) {
+			let tile = new createjs.Shape().set({ x: 70*col, y: 70*row, name: row+':'+col });
+			tile.color = (black ? '#222' : '#fff');
+			tile.graphics.beginFill(tile.color).drawRect(0,0,70,70);
+			stage.addChild(tile);
+			black = !black;
+		}
 		black = !black;
 	}
-	black = !black;
-}
 
-stage.update();
+	stage.update();
+});
