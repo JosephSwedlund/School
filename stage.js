@@ -3,7 +3,9 @@ function revertTiles(tileList) {
 }
 
 function highlightTiles(tileList) {
-	tileList.forEach(highlight);
+	let highlights = new Array
+	tileList.forEach((tileName) => highlights.push(highlight(tileName)));
+	return highlights;
 }
 
 function highlight(tileName) {
@@ -12,6 +14,7 @@ function highlight(tileName) {
 		stage.addChild(highlighter.clone()).set({ x: tile.x, y: tile.y, name: tile.name+'HL' });
 		stage.update();
 	}
+	return tile;
 }
 
 function revert(tileName) {
