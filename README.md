@@ -1,6 +1,6 @@
 # Game
 
-Stage
+<b>Stage</b>
   - the tiles are named 'row:col' and can are accessed using <b>stage.getChildByName(row+':'+col);</b>
   - '0:0' is the top left
   - '7:7' is the bottom right
