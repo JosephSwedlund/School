@@ -23,58 +23,31 @@ function highlight(tileName) {
 function revert(tileName) {
 	let highlight = stage.getChildByName(tileName+'HL');
 	if (highlight) {
-		stage.removeChild(highlight)
+		stage.removeChild(highlight);
 		stage.update();
 	}
 }
 
+function checkWin() {
+    if(pieces[!player * 1] < 1)
+        alert("You have decimated the enemy team and their families are sad. I hope you're happy, you monster.");
+}
+
 function move(row, col) {
-
-	let currentLocation = ""+selected.row+selected.col;
-			//console.log(currentLocation);
-			let i = boardState.indexOf(currentLocation);
-
 	let tile = stage.getChildByName(row + ":" + col);
-	if(tile.x+35, tile.y+35)
-		if(tile){
-		//console.log(i);
-
-//placeholders to move the piece back if something is already on the next space.
-		let phX = selected.x;
-		let phY	= selected.y;
-		let phName = selected.name;
-		let phRow = selected.row;
-		let phCol = selected.col;
-
+	if(tile){
+        var old = stage.getChildByName(row + ":" + col + "P");
+        if(old){
+            if(old.side == player){
+                return;
+            }else{
+                stage.removeChild(old);
+                pieces[!player * 1] -= 1;
+                stage.update();
+                checkWin();
+            }
+        }
 		selected.set({ x: tile.x+35, y: tile.y+35, name: row + ":" + col + "P", row: row, col: col});
-		let nextLocation = ""+selected.row+selected.col;
-
-		//console.log(boardState.slice(0, i)+boardState.slice(i+1, 33));
-		//console.log(boardState);
-		//console.log(boardStateColor);
-
-	//setting the piece to the new space 
-		let testBoard = boardState.slice(0, i).concat(boardState.slice(i+1, 33));
-		let testBoardColor = boardStateColor.slice(0, i).concat(boardStateColor.slice(i+1, 33))
-
-		//console.log(testBoardColor);
-
-	//resetting the piece to the non-new space if something was already there. 
-		if(testBoard.indexOf(nextLocation) != -1){
-			selected.set({ x: phX, y: phY, name: phName, row: phRow, col: phCol});
-		}
-		if((boardStateColor[(testBoard.indexOf(nextLocation))] != testBoardColor[i]))
-		{ 
-			console.log(testBoardColor);
-			console.log(boardStateColor);
-			selected.set({ x: tile.x+35, y: tile.y+35, name: row + ":" + col + "P", row: row, col: col});
-		}
-		//console.log(testBoard);
-
-
-		boardState[i] = ""+selected.row+selected.col;
-		boardStateColor[i] = testBoardColor[i];
-		//console.log(boardState);
 	}
 	revertTiles(activeHighlights)
 	activeHighlights = new Array();
@@ -84,7 +57,7 @@ function move(row, col) {
 function place(row, col, color) {
 	let tile = stage.getChildByName(row + ":" + col);
 	if (tile && color == "white") {
-		stage.addChild(whitePiece.clone()).set({ x: tile.x+35, y: tile.y+35, name: tile.name+'P', row: row, col: col});
+		stage.addChild(whitePiece.clone()).set({ x: tile.x+35, y: tile.y+35, name: tile.name+'P', row: row, col: col, side: player});
 		if(!player){
 			stage.getChildByName(row + ":" + col + "P").on("click", function(event) { 
 				selected = this;
@@ -95,7 +68,7 @@ function place(row, col, color) {
 		}
 		stage.update();
 	}else if (tile && color == "black") {
-		stage.addChild(blackPiece.clone()).set({ x: tile.x+35, y: tile.y+35, name: tile.name+'P', row: row, col: col});
+		stage.addChild(blackPiece.clone()).set({ x: tile.x+35, y: tile.y+35, name: tile.name+'P', row: row, col: col, side: !player * 1});
 		if(player){
 				stage.getChildByName(row + ":" + col + "P").on("click", function(event) { 
 				selected = this;
@@ -109,48 +82,39 @@ function place(row, col, color) {
 	return tile;
 }
 
-var counter = 0;
 function setupBoard() {
 	if(player){
 		for (let col = 0; col < 8; col++) {
 			for (let row = 0; row < 2; row++) {
 				place(row, col, "white");	
-				boardStateColor[counter] = ("white");
-				boardState[counter++] = (""+row+col);
 			}	
 		}
 		for (let col = 0; col < 8; col++) {
 			for (let row = 6; row < 8; row++) {
 				place(row, col, "black");	
-				boardStateColor[counter] = ("black");
-				boardState[counter++] = (""+row+col);
 			}	
 		}
 	}else{
 		for (let col = 0; col < 8; col++) {
 			for (let row = 0; row < 2; row++) {
-				place(row, col, "black");
-				boardStateColor[counter] = ("black");
-				boardState[counter++] = (""+row+col);
+				place(row, col, "black");	
 			}	
 		}
 		for (let col = 0; col < 8; col++) {
 			for (let row = 6; row < 8; row++) {
 				place(row, col, "white");	
-				boardStateColor[counter] = ("white");
-				boardState[counter++] = (""+row+col);
 			}	
 		}		
 	}
 	
 }
 
-var boardState = [];
-var boardStateColor = [];
 var stage;
-var player = true;
+var player = 0;
+var pieces = new Array();
+pieces[0] = 16;
+pieces[1] = 16;
 var selected;
-var spaceOccupied = false;
 var activeHighlights = new Array();
 const highlightGraphics = new createjs.Graphics().f('#2af').drawRect(0,0,70,70);
 const highlighter = new createjs.Shape().set({ alpha: 0.4, graphics: highlightGraphics });
@@ -201,6 +165,6 @@ $(function() {
 	*/	
 		
 		
-	console.log(boardState);
+
 	
 });
