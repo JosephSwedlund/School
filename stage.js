@@ -72,8 +72,8 @@ function move(row, col) {
 		//console.log(testBoard);
 
 
+		boardState[i] = ""+selected.row+selected.col;
 		boardStateColor[i] = testBoardColor[i];
-		checker = true;
 		//console.log(boardState);
 	}
 	revertTiles(activeHighlights)
