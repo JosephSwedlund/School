@@ -1,7 +1,7 @@
 # Game
 
 ## **Hey**
- I redid the project to clean up some code. I did some stuff with EaselJS classes and inheritence, so now making a new type of Piece should be very easy and clear. I included an example below and a file called PieceTemplate.js that has comments, and that chould explain how to make a piece.
+ I redid the project to clean up some code. I did some stuff with EaselJS classes and inheritence, so now making a new type of Piece should be very easy and clear. I included an example below and a file called ***PieceTemplate.js*** that has comments, and that chould explain how to make a piece.
 
 ### PieceTemplate
   `````
