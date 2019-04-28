@@ -1,5 +1,8 @@
+import Stage from './Stage.js';
+import Highlight from './Highlight.js';
+
 //constructor
-function Piece(row, col, color, pattern) {
+export default function Piece(row, col, color, pattern) {
 	this.Shape_constructor();
 
 	this.graphics.f((color == 'white' ? '#AAA' : '#555')).drawCircle(35,35,30);
@@ -27,8 +30,8 @@ p.moveTo = function(row, col) {
 //called by the highlights
 p.capture = function() {
 	Piece.count[this.color]--;
-	stage.removeChild(this);
-	stage.update();
+	Stage.remove(this);
+	Stage.update();
 	if(Piece.count[this.color] == 0)
 		alert("The "+this.color+" army has been defeated!");
 }
