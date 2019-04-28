@@ -1,4 +1,4 @@
-import Stage from './Stage.js';
+import Stage from './js/Stage.js';
 
 var stage; 
 var player; //the color of the player
