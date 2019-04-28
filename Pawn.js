@@ -1,6 +1,7 @@
 function Pawn(row, col, color) {
-	return Piece(row, col, color, Pawn.pattern);
+	this.Piece_constructor(row, col, color, Pawn.pattern);
 }
+createjs.extend(Pawn, Piece);
 
 Pawn.pattern = () => {
 	let piece = Highlight.target;
@@ -8,3 +9,5 @@ Pawn.pattern = () => {
 	[0,1,2,3,5,7].forEach((dir) => tiles.push({ row: piece.row+Math.floor(dir/3)-1, col: piece.col+(dir%3)-1 }));
 	return tiles;
 };
+
+createjs.promote(Pawn, "Piece");

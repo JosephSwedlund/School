@@ -1,20 +1,50 @@
+//constructor
 function Highlight(row, col) {
-	let highlight = new createjs.Shape().set({ x: col*70, y:row*70, })
-	highlight.graphics.f('#2af').drawRect(0,0,70,70);
-	highlight.row = row;
-	highlight.col = col;
-	highlight.name = row+":"+col+"HL";
-	highlight.alpha = 0.4;
+	this.Shape_constructor();
+	this.graphics.f('#2af').drawRect(0,0,70,70);
+	this.name = row+":"+col+"HL";
+	this.row = row;
+	this.col = col;
+	this.x = col*70;
+	this.y = row*70;
+	this.alpha = 0.4;
 
-	highlight.on("click",function (event) {
+	//click the highlighted space to move the piece
+	this.on("click",function (event) {
 		Highlight.target.moveTo(this.row, this.col);
+		Highlight.revert();
 		stage.update();
 	});
 
-	Highlight.all.push(highlight);
-
-	return highlight;
+	Highlight.all.push(this);
 }
-Highlight.all = new Array();
+createjs.extend(Highlight, createjs.Shape);
 
-Highlight.target = null;
+Highlight.all = new Array(); //keeps all the current highlights
+Highlight.target = null; //keeps the piece that is currently trying to move
+
+//this clears all the current Highlights
+Highlight.revert = function() {
+	Highlight.all.forEach((highlight) => stage.removeChild(highlight));
+	Highlight.all.splice(0, Highlight.all.length);
+}
+
+//this will highlight every tile in the tile list
+Highlight.highlight = function(tileList) {
+	tileList.forEach((props) => {
+		//checks if the location is on the board
+		if (range.includes(props.row) && range.includes(props.col)) {
+			let piece = stage.getChildByName(props.row+":"+props.col);
+			//highlight the space is empty
+			if (!piece)
+				stage.addChild(new Highlight(props.row, props.col));
+
+			//highlighs only if the piece os an opposing piece
+			else if (piece.color != Highlight.target.color)
+				stage.addChild(new Highlight(props.row, props.col)).on('click', () => piece.capture());
+		}
+	});
+	stage.update();
+}
+
+createjs.promote(Highlight, 'Shape');

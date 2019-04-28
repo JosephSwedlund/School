@@ -1,38 +1,23 @@
-
-function revert() {
-	Highlight.all.forEach((highlight) => {
-		stage.removeChild(highlight)
-		delete highlight;
-	});
-}
-
-function highlight(tileList) {
-	tileList.forEach((props) => {
-		let piece = stage.getChildByName(props.row+":"+props.col);
-		if (!piece)
-			stage.addChild(new Highlight(props.row, props.col));
-		else if (piece.color != Highlight.target.color)
-			stage.addChild(new Highlight(props.row, props.col)).on('click', () => piece.capture());
-	});
-	stage.update();
-}
-
 function setupBoard() {
 	let color = { one: player, two: (player!="white" ? "white":"black") }
 	for (let col = 0; col < 8; col++) {
-		for (let row = 0; row < 2; row++)
+		for (let row = 0; row < 2; row++) //enemy pieces
 			stage.addChild(new Pawn(row, col, color.two));
-		for (let row = 6; row < 8; row++)
+		for (let row = 6; row < 8; row++) //ally pieces
 			stage.addChild(new Pawn(row, col, color.one)).on('click', Piece.focus);
 	}
 }
 
-var stage;
-var player;
-//init
-$(function() {
+var stage; 
+var player; //the color of the player
+
+var range = [0, 1, 2, 3, 4, 5, 6, 7];
+
+function init() {
 	player = "white";
 	stage = new createjs.Stage(document.getElementById('myCanvas'));
+
+	//creates the board
 	var black = false;
 	for (let row = 0; row < 8; row++) {
 		for (let col = 0; col < 8; col++) {
@@ -44,6 +29,11 @@ $(function() {
 		}
 		black = !black;
 	}
+
+
 	setupBoard();
+
 	stage.update();
-});
+}
+
+$(init);

@@ -1,30 +1,46 @@
+//constructor
 function Piece(row, col, color, pattern) {
-	let piece = new createjs.Shape().set({ color: color, pattern: pattern });
-	piece.graphics.f((color == 'white' ? '#AAA' : '#555')).drawCircle(35,35,30);
-	piece.moveTo = function(row, col) {
-		this.name = row+":"+col;
-		this.x = col * 70;
-		this.y = row * 70;
-		this.row = row;
-		this.col = col;
-		revert();
-	}
-	piece.capture = function() {
-		Piece.count[this.color]--;
-		stage.removeChild(this);
-		stage.update();
-		if(Piece.count[this.color] == 0)
-			alert("The "+this.color+" army has been defeated!");
-	}
-	piece.moveTo(row, col);
+	this.Shape_constructor();
+
+	this.graphics.f((color == 'white' ? '#AAA' : '#555')).drawCircle(35,35,30);
+	this.color = color;
+	this.pattern = pattern;
+	
+	this.moveTo(row, col);
 
 	Piece.count[color]++;
-	return piece;
 }
 
-Piece.count = { white: 0, black:0 };
-Piece.focus = function() {
-	revert();
-	Highlight.target = this;
-	highlight(this.pattern());
+var p = createjs.extend(Piece, createjs.Shape);
+
+//moves the piece to specified destinations
+//called by the highlights
+p.moveTo = function(row, col) {
+	this.name = row+":"+col;
+	this.x = col * 70;
+	this.y = row * 70;
+	this.row = row;
+	this.col = col;
 }
+
+//remove the piece and updates the piece count
+//called by the highlights
+p.capture = function() {
+	Piece.count[this.color]--;
+	stage.removeChild(this);
+	stage.update();
+	if(Piece.count[this.color] == 0)
+		alert("The "+this.color+" army has been defeated!");
+}
+
+//static valriable keeping track of each sides piece count
+Piece.count = { white: 0, black:0 };
+
+//handler for when the piece is clicked
+Piece.focus = function() {
+	Highlight.revert();
+	Highlight.target = this;
+	Highlight.highlight(this.pattern());
+}
+
+createjs.promote(Piece, 'Shape');
