@@ -31,6 +31,8 @@ Stage.add = (child) => { return Stage.instance.addChild(child); }; //adds a chil
 Stage.get = (row, col) => { return Stage.instance.getChildByName(row+':'+col); }; //retrieves an object on the stage
 Stage.update = () => Stage.instance.update(); //updates the stage
 Stage.invert = (row) => { return 7 - row; } //inverts the row for different views
+Stage.startTurn = () => Stage.instance.dispatchEvent('start-turn');
+Stage.endTurn = () => Stage.instance.dispatchEvent('end-turn');
 
 //places all the pieces specified by the ally and the enemy arrays
 p.setupBoard = function(player, ally, enemy) {
