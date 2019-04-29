@@ -41,6 +41,11 @@ p.setClick = function() { this.on('click', Piece.focus); }
 //prevents the piece from moving
 p.unsetClick = function() { this.off('click', Piece.focus); }
 
+p.setAlly = function() {
+	this.on('start-turn', this.setClick);
+	this.on('end-turn', this.unsetClick);
+}
+
 //static valriable keeping track of each sides piece count
 Piece.count = { white: 0, black:0 };
 

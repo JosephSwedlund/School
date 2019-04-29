@@ -39,7 +39,7 @@ p.setupBoard = function(player, ally, enemy) {
 		for (let row = 0; row < 2; row++) {
 			let allyPiece = Pieces[ally[row][col]];
 			let enemyPiece = Pieces[enemy[row][col]];
-			this.addChild(new allyPiece(Stage.invert(row), col, color.one)).setClick(); //ally pieces
+			this.addChild(new allyPiece(Stage.invert(row), col, color.one)).setAlly(); //ally pieces
 			this.addChild(new enemyPiece(row, col, color.two)); //enemy pieces
 		}
 	});
