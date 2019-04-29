@@ -5,7 +5,6 @@ import Highlight from './Highlight.js';
 export default function Piece(row, col, color, pattern) {
 	this.Shape_constructor();
 
-	this.graphics.f((color == 'white' ? '#AAA' : '#555')).drawCircle(35,35,30);
 	this.color = color;
 	this.pattern = pattern;
 	
@@ -40,7 +39,7 @@ p.capture = function() {
 p.setClick = function() { this.on('click', Piece.focus); }
 
 //prevents the piece from moving
-p.unsetClick = funciton() { this.off('click', Piece.focus); }
+p.unsetClick = function() { this.off('click', Piece.focus); }
 
 //static valriable keeping track of each sides piece count
 Piece.count = { white: 0, black:0 };
