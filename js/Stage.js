@@ -1,12 +1,13 @@
 import Pieces from './Pieces.js';
 
-
+//singleton object for the stage interactions
 export default function Stage(canvasID) {
 	if (Stage.instance)
 		return Stage.instance;
 
 	this.Stage_constructor(document.getElementById(canvasID));
 
+	//make all the tiles
 	var black = false;
 	Stage.range.forEach((row) => {
 		Stage.range.forEach((col) => {
@@ -24,15 +25,14 @@ export default function Stage(canvasID) {
 let p = createjs.extend(Stage, createjs.Stage);
 
 Stage.instance = null
-Stage.range = [0, 1, 2, 3, 4, 5, 6, 7];
-Stage.remove = (child) => Stage.instance.removeChild(child);
-Stage.add = (child) => { return Stage.instance.addChild(child); };
-Stage.get = (row, col) => { return Stage.instance.getChildByName(row+':'+col); };
-Stage.update = () => Stage.instance.update();
-Stage.invert = (row) => {
-	return 7 - row;
-}
+Stage.range = [0, 1, 2, 3, 4, 5, 6, 7]; //width and height of the board
+Stage.remove = (child) => Stage.instance.removeChild(child); //removes an object
+Stage.add = (child) => { return Stage.instance.addChild(child); }; //adds a child to the stage
+Stage.get = (row, col) => { return Stage.instance.getChildByName(row+':'+col); }; //retrieves an object on the stage
+Stage.update = () => Stage.instance.update(); //updates the stage
+Stage.invert = (row) => { return 7 - row; } //inverts the row for different views
 
+//places all the pieces specified by the ally and the enemy arrays
 p.setupBoard = function(player, ally, enemy) {
 	let color = { one: player, two: (player!="white" ? "white":"black") }
 	Stage.range.forEach((col) => {
