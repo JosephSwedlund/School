@@ -1,5 +1,5 @@
-import Piece from './Piece.js';
-import Pawn from './Pawn.js';
+import Pieces from './Pieces.js';
+
 
 export default function Stage(canvasID) {
 	if (Stage.instance)
@@ -29,14 +29,19 @@ Stage.remove = (child) => Stage.instance.removeChild(child);
 Stage.add = (child) => { return Stage.instance.addChild(child); };
 Stage.get = (row, col) => { return Stage.instance.getChildByName(row+':'+col); };
 Stage.update = () => Stage.instance.update();
+Stage.invert = (row) => {
+	return 7 - row;
+}
 
-p.setupBoard = function(player) {
+p.setupBoard = function(player, ally, enemy) {
 	let color = { one: player, two: (player!="white" ? "white":"black") }
 	Stage.range.forEach((col) => {
-		for (let row = 0; row < 2; row++) //enemy pieces
-			this.addChild(new Pawn(row, col, color.two));
-		for (let row = 6; row < 8; row++) //ally pieces
-			this.addChild(new Pawn(row, col, color.one)).on('click', Piece.focus);
+		for (let row = 0; row < 2; row++) {
+			let allyPiece = Pieces[ally[row][col]];
+			let enemyPiece = Pieces[enemy[row][col]];
+			this.addChild(new allyPiece(Stage.invert(row), col, color.one)).setClick(); //ally pieces
+			this.addChild(new enemyPiece(row, col, color.two)); //enemy pieces
+		}
 	});
 }
 

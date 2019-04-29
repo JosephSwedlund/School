@@ -36,6 +36,10 @@ p.capture = function() {
 		alert("The "+this.color+" army has been defeated!");
 }
 
+p.setClick = function() {
+	this.on('click', Piece.focus);
+}
+
 //static valriable keeping track of each sides piece count
 Piece.count = { white: 0, black:0 };
 

@@ -7,7 +7,10 @@ $(function() {
 	player = "white";
 	stage = new Stage('myCanvas');
 
-	stage.setupBoard(player);
+	let ally = [['Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn'],['Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn']];
+	let enemy = [['Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn'],['Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn','Pawn']];
+
+	stage.setupBoard(player, ally, enemy);
 
 	stage.update();
 });
