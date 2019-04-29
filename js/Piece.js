@@ -39,11 +39,11 @@ p.capture = function() {
 p.setClick = function() { this.on('click', Piece.focus); }
 
 //prevents the piece from moving
-p.unsetClick = function() { this.off('click', Piece.focus); }
+p.unsetClick = function() { this.removeAllEventListeners(); }
 
 p.setAlly = function() {
-	this.on('start-turn', this.setClick);
-	this.on('end-turn', this.unsetClick);
+	this.setClick();
+	this.ally = true;
 }
 
 //static valriable keeping track of each sides piece count
