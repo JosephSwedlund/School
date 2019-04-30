@@ -3,7 +3,7 @@
 ## **Hey**
 ## Turns
 There is a file in the **js** folder called **Socket.js** that imports the **Stage**.  
-Too accomidate for turns there are functions
+To accomidate for turns there are functions
 	
 	Stage.startTurn()
 	Stage.endTurn()
