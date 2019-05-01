@@ -11,9 +11,14 @@ import Highlight from './Highlight.js';
 
 function MyPiece(row, col, color) {
 	this.Piece_constructor(row, col, color, MyPiece.pattern);
+	this.graphics = MyPiece.graphics[color];
 }
 createjs.extend(MyPiece, Piece);
 
+MyPiece.graphics = {
+	white: new createjs.Graphics().f('#AAA').drawCircle(35,35,30),
+	black: new createjs.Graphics().f('#555').drawCircle(35,35,30)
+}
 //this is the function that makes movement work
 //it returns an array with the coordinates of where the piece can currenty go
 MyPiece.pattern = () => {
