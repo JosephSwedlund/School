@@ -9,8 +9,8 @@ export default function Pawn(row, col, color) {
 createjs.extend(Pawn, Piece);
 
 Pawn.graphics = {
-	white: new createjs.Graphics().f('#AAA').drawCircle(35,35,30),
-	black: new createjs.Graphics().f('#555').drawCircle(35,35,30)
+	white: new createjs.Graphics().f('#FFF').setStrokeStyle(3).s("#000").drawCircle(35,35,30),
+	black: new createjs.Graphics().f('#444').setStrokeStyle(3).s("#000").drawCircle(35,35,30)
 }
 
 Pawn.pattern = () => {
