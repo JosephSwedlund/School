@@ -12,7 +12,7 @@ export default function Stage(canvasID) {
 	Stage.range.forEach((row) => {
 		Stage.range.forEach((col) => {
 			let tile = new createjs.Shape().set({ x: 70*col, y: 70*row });
-			tile.color = (black ? '#222' : '#fff');
+			tile.color = (black ? '#b58863' : '#f0d9b5');
 			tile.graphics.f(tile.color).dr(0,0,70,70);
 			this.addChild(tile);
 			black = !black;
