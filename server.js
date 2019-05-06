@@ -75,6 +75,7 @@ io.on('connect', (socket) => {
 	});
 
 	socket.on('move', (piece, dest) => socket.broadcast.emit('updateBoard', piece, dest));
+	console.log('here');
 });
 
 process.on('SIGINT', () => process.exit());
