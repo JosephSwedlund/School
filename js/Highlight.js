@@ -1,4 +1,4 @@
-// import Socket from './Socket.js';
+import Socket from './Socket.js';
 import Stage from "./Stage.js";
 
 //constructor
@@ -15,7 +15,9 @@ export default function Highlight(row, col) {
 
 	//click the highlighted space to move the piece
 	this.on("click",function (event) {
-		Highlight.target.moveTo(this.row, this.col);
+		let piece = Highlight.target;
+		Socket.emit('move', { row: piece.row, col: piece.col }, { row: this.row, col: this.col });
+		piece.moveTo(this.row, this.col);
 		Highlight.revert();
 		Stage.update();
 	});
