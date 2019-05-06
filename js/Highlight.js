@@ -17,6 +17,7 @@ export default function Highlight(row, col) {
 	this.on("click",function (event) {
 		let piece = Highlight.target;
 		Socket.emit('move', { row: piece.row, col: piece.col }, { row: this.row, col: this.col });
+		Stage.endTurn();
 		piece.moveTo(this.row, this.col);
 		Highlight.revert();
 		Stage.update();
