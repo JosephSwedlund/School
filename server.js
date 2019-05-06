@@ -15,8 +15,7 @@ let con = mysql.createConnection({
 });
 
 con.connect((err) => {
-	if (err)
-		throw err;
+	if (err) throw err;
 	console.log('connected to database');
 });
 
@@ -34,7 +33,7 @@ app.use(parser.urlencoded({ extended: true }));
 
 //filter
 app.use('/*', (req, resp, next) => {
-	if (req.session.user || req.originalUrl == '/login')
+	if (req.session.user || req.originalUrl == '/login' || req.originalUrl == '/sign-in')
 		next();
 	else
 		resp.redirect('/login');
@@ -46,19 +45,36 @@ app.get('/', (req, resp) => resp.redirect('/dashboard'));
 app.get('/login', (req, resp) => resp.render('login.ejs'));
 
 app.post('/login', (req, resp) => {
-
+	let username = req.body.username, password = req.body.password;
+	let sql = "select * from users where username = ? and password = ?";
+	con.query(sql, [username, password], (err, result) => {
+		if (err) throw err;
+		if (result.length == 1) {
+			req.session.user = result[0];
+			resp.redirect('/dashboard');
+		}
+		else
+			resr.redirect('/login');
+	})
 });
+
+app.get('/sign-up', (req, resp) => resp.render('sign-up.ejs'));
 
 app.get('/dashboard', (res, resp) => resp.render('index.ejs'));
 
 //sockets
 const io = require('socket.io')(server);
 
+let player = 0;
 io.on('connect', (socket) => {
+	socket.join('setup');
+	io.to('setup').emit('setcolor', (++player == 1 ? 'white' : 'black'));
+	socket.leave('setup');
 	socket.join('room');
-	socket.room = 'room';
+	if (player == 2)
+		io.to('room').emit('setup');
 	socket.on('move', function (piece, dest) {
-		this.to(this.room).emit('updateBoard', piece, dest);
+		this.to('room').emit('updateBoard', piece, dest);
 	});
 });
 
