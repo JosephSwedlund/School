@@ -1,6 +1,8 @@
 # Game
 
-## **Hey**
+Run the following line to get started:
+npm install express ejs express-session socket.io mysql
+
 ## Turns
 There is a file in the **js** folder called **Socket.js** that imports the **Stage**.  
 To accomidate for turns there are functions
