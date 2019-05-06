@@ -78,7 +78,6 @@ io.on('connect', (socket) => {
 	});
 });
 
-process.on('SIGINT', () => {
-	con.end();
-	server.close(() => console.log('server closed'));
-});
+process.on('SIGINT', () => process.exit());
+
+process.on('exit', (code) => con.end());
