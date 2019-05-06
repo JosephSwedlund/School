@@ -4,12 +4,12 @@ const path = require('path');
 
 //setting up server
 const app = express();
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', __dirname);
 app.set('view engine', 'ejs');
 const server = app.listen(80,() => console.log('Server started'));
 
 //midwares
-app.use(express.static(path.join(__dirname, 'pubic')));
+app.use(express.static(path.join(__dirname, 'js')));
 
 //url stuffs
 app.get('/', (req, resp) => resp.render('index.ejs'));
