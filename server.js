@@ -33,7 +33,7 @@ app.use(parser.urlencoded({ extended: true }));
 
 //filter
 app.use('/*', (req, resp, next) => {
-	if (req.session.user || req.originalUrl == '/login' || req.originalUrl == '/sign-in')
+	if (req.session.user || req.originalUrl == '/login' || req.originalUrl == '/newaccount')
 		next();
 	else
 		resp.redirect('/login');
@@ -61,6 +61,31 @@ app.post('/login', (req, resp) => {
 app.get('/sign-up', (req, resp) => resp.render('sign-up.ejs'));
 
 app.get('/dashboard', (res, resp) => resp.render('index.ejs'));
+
+app.get('/newaccount', (res, resp) => resp.render('newaccount.ejs'));
+
+app.post('/newaccount', (req, resp) => {
+	let username = req.body.username, password1 = req.body.password1, password2 = req.body.password2;
+	if(password1 == password2){
+		let sql = "insert into users (username, password) values ( ? , ? );";
+		con.query(sql, [username, password1], (err, result) => {
+			if (err) throw err;
+			if (result.affectedRows == 1) {
+				let sql = "select * from users where username = ?";
+				con.query(sql, [username], (err, result) => {
+					if (err) throw err;
+					if (result.length == 1) {
+						req.session.user = result[0];
+						resp.redirect('/dashboard');
+					}else
+						resp.redirect('/newaccount');
+				});
+			}else
+				resp.redirect('/newaccount');
+		});
+	}else
+	   resp.redirect('/newaccount');
+});
 
 //sockets
 const io = require('socket.io')(server);
