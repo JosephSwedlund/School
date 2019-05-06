@@ -18,7 +18,9 @@ app.get('/', (req, resp) => resp.render('index.ejs'));
 const io = require('socket.io')(server);
 
 io.on('connect', (socket) => {
+	socket.join('room');
+	socket.room = 'room';
 	socket.on('move', function (piece, dest) {
-		this.to(this.room).emit('updateBoard');
+		this.to(this.room).emit('updateBoard', piece, dest);
 	});
 });

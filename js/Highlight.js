@@ -1,3 +1,4 @@
+// import Socket from './Socket.js';
 import Stage from "./Stage.js";
 
 //constructor
@@ -44,7 +45,7 @@ Highlight.highlight = function(tileList) {
 
 			//highlighs only if the piece os an opposing piece
 			else if (piece.color != Highlight.target.color)
-				Stage.add(new Highlight(props.row, props.col)).on('click', () => piece.capture());
+				Stage.add(new Highlight(props.row, props.col));
 		}
 	});
 	Stage.update();

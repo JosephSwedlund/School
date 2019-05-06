@@ -1,3 +1,4 @@
+import Socket from './Socket.js';
 import Stage from './Stage.js';
 import Highlight from './Highlight.js';
 
@@ -18,6 +19,9 @@ var p = createjs.extend(Piece, createjs.Shape);
 //moves the piece to specified destinations
 //called by the highlights
 p.moveTo = function(row, col) {
+	Socket.emit('move', { row: this.row, col: this.col }, { row: row, col: col });
+	if (Stage.get(row, col))
+		Stage.get(row, col).capture();
 	this.name = row+":"+col;
 	this.x = col * 70;
 	this.y = row * 70;
