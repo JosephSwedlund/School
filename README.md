@@ -1,10 +1,14 @@
 # Game
 
-Run the following line to get started:
+Run the following line to set up the server:
 ```
-npm install express ejs express-session socket.io mysql
+npm install
 ```
 
+To start the server, use the following:
+```
+npm start
+```
 
 ## Turns
 There is a file in the **js** folder called **Socket.js** that imports the **Stage**.  
