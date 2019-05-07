@@ -7,17 +7,12 @@ const parser = require('body-parser');
 const session = require('express-session');
 const mysql = require('mysql');
 
-let con = mysql.createConnection({
+const connection_options = {
 	host: 'localhost',
 	user: 'game',
 	password: 'webdev',
 	database: 'game'
-});
-
-con.connect((err) => {
-	if (err) throw err;
-	console.log('connected to database');
-});
+}
 
 //setting up server
 const app = express();
@@ -45,6 +40,10 @@ app.get('/', (req, resp) => resp.redirect('/dashboard'));
 app.get('/login', (req, resp) => resp.render('login.ejs'));
 
 app.post('/login', (req, resp) => {
+	let con = mysql.createConnection(connection_options);
+
+	con.connect((err) => { if (err) throw err; });
+
 	let username = req.body.username, password = req.body.password;
 	let sql = "select * from users where username = ? and password = ?";
 	con.query(sql, [username, password], (err, result) => {
@@ -55,6 +54,7 @@ app.post('/login', (req, resp) => {
 		}
 		else
 			resp.redirect('/login');
+		con.end();
 	});
 });
 
@@ -67,6 +67,10 @@ app.get('/newaccount', (res, resp) => resp.render('newaccount.ejs'));
 app.post('/newaccount', (req, resp) => {
 	let username = req.body.username, password1 = req.body.password1, password2 = req.body.password2;
 	if(password1 == password2){
+		let con = mysql.createConnection(connection_options);
+
+		con.connect((err) => { if (err) throw err; });
+
 		let sql = "insert into users (username, password) values ( ? , ? );";
 		con.query(sql, [username, password1], (err, result) => {
 			if (err) throw err;
@@ -79,6 +83,7 @@ app.post('/newaccount', (req, resp) => {
 						resp.redirect('/dashboard');
 					}else
 						resp.redirect('/newaccount');
+					con.end();
 				});
 			}else
 				resp.redirect('/newaccount');
@@ -101,7 +106,3 @@ io.on('connect', (socket) => {
 
 	socket.on('move', (piece, dest) => socket.broadcast.emit('updateBoard', piece, dest));
 });
-
-process.on('SIGINT', () => process.exit());
-
-process.on('exit', (code) => con.end());
