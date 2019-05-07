@@ -1,5 +1,3 @@
-//npm install express ejs express-session socket.io mysql
-
 //getting stuffs
 const express = require('express');
 const path = require('path');
